@@ -1,8 +1,7 @@
-use std::{ffi::{c_char, CString}, mem::transmute};
-use crate::cprint::{CPrint, Type};
-
 pub mod aslr;
 pub mod cprint;
+
+use crate::cprint::{CPrint, Type};
 
 #[poggers_derive::create_entry]
 fn entry() -> Result<(), String> {
