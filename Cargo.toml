@@ -1,0 +1,11 @@
+[package]
+name = "RBX-Yep"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+poggers = "0.4.0"
+poggers-derive = "0.1.4"
