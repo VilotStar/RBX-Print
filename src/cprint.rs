@@ -8,22 +8,12 @@ pub enum Type {
     Error
 }
 
-pub struct CPrint {
-    cprint: extern "C" fn (Type, *const c_char, ...)
-}
+pub fn get_print(addr: usize) -> impl Fn(Type, &str) -> () {
+    let cprint_addr = addr as *const ();
+    let cprint = unsafe { transmute::<*const (), extern "C" fn (Type, *const c_char, ...) -> ()>(cprint_addr) };
 
-impl CPrint {
-    pub fn new(addr: usize) -> Self {
-        let cprint_addr = addr as *const ();
-        let cprint = unsafe { transmute::<*const (), extern "C" fn (Type, *const c_char, ...) -> ()>(cprint_addr) };
-
-        Self {
-            cprint
-        }
-    }
-
-    pub fn print(&self, msg_type: Type, msg: &str) {
+    move |msg_type, msg| {
         let c_str = CString::new(msg).unwrap();
-        (self.cprint)(msg_type, c_str.as_ptr());
+        (cprint)(msg_type, c_str.as_ptr());
     }
 }
